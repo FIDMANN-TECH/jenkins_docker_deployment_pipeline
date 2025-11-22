@@ -27,6 +27,12 @@ jenkins-pipeline-app/
 └── README.md
 ```
 
+## Architecture Diagram
+![Architecture diagram](./img/architecture_diagram_improved.png)
+
+## CI/CD Pipeline Diagram
+![CI/CD pipeline](./img/cicd_pipeline_diagram_improved.png)
+
 ---
 
 # 🚀 Final Jenkinsfile
@@ -96,11 +102,6 @@ Open ports:
 - 8080 (Jenkins)
 - 8081 (NGINX app)
 
-### 📸 Screenshot 01 — EC2 Instance Running  
-`01-ec2-instance-running.png`
-
-### 📸 Screenshot 02 — Security Group Ports  
-`02-ec2-security-group-ports.png`
 
 ---
 
@@ -113,37 +114,9 @@ sudo systemctl start docker
 sudo usermod -aG docker ec2-user
 ```
 
-Reconnect to apply group changes.
-
-### 📸 Screenshot 03 — Docker Version  
-`03-docker-version-output.png`
-
 ---
 
-## 3️⃣ Install Jenkins
-
-```bash
-sudo dnf update -y
-sudo dnf install java-17-amazon-corretto -y
-
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-
-sudo dnf install jenkins -y
-sudo systemctl enable jenkins
-sudo systemctl start jenkins
-```
-
-### 📸 Screenshot 04 — Jenkins Status  
-`04-jenkins-status-active.png`
-
-### 📸 Screenshot 05 — Jenkins Unlock Page  
-`05-jenkins-unlock-page.png`
-
----
-
-## 4️⃣ Create Project Files (on EC2 or GitHub)
+## 3️⃣ Create Project Files (on EC2 or GitHub)
 
 ### **index.html**
 ```html
@@ -166,18 +139,9 @@ COPY index.html /usr/share/nginx/html/
 EXPOSE 80
 ```
 
-### 📸 Screenshot 06 — index.html in Vim  
-`06-index-html-in-vim.png`
-
-### 📸 Screenshot 07 — Dockerfile in Vim  
-`07-dockerfile-in-vim.png`
-
-### 📸 Screenshot 08 — GitHub Repo  
-`08-github-repository-files.png`
-
 ---
 
-## 5️⃣ Manual Docker Test (Recommended Before Jenkins)
+## 4️⃣ Manual Docker Test (Recommended Before Jenkins)
 
 ```bash
 docker build -t nginx-pipeline .
@@ -185,49 +149,63 @@ docker run -d -p 8081:80 --name nginx-container nginx-pipeline
 docker ps
 ```
 
-### 📸 Screenshot 14 — Manual Docker Build  
-`14-manual-docker-build.png`
+---
 
-### 📸 Screenshot 15 — Manual Docker Images  
-`15-manual-docker-images.png`
-
-### 📸 Screenshot 16 — Manual Docker Run  
-`16-manual-docker-run.png`
-
-### 📸 Screenshot 17 — Manual Docker PS  
-`17-manual-docker-ps.png`
+## 5️⃣ Create Jenkins Pipeline Job
 
 ---
 
-## 6️⃣ Create Jenkins Pipeline Job
-
-### 📸 Screenshot 09 — Pipeline Configuration  
-`09-jenkins-pipeline-configuration.png`
-
-### 📸 Screenshot 10 — Jenkins Console Output Success  
-`10-jenkins-console-output-success.png`
-
-### 📸 Screenshot 12 — Docker PS After Pipeline  
-`12-docker-ps-running-container.png`
-
----
-
-## 7️⃣ Access NGINX Web App
+## 6️⃣ Access NGINX Web App
 
 Go to:
 ```
 http://EC2-Public-IP:8081
 ```
 
-### 📸 Screenshot 13 — Webpage Running  
-`13-nginx-webpage-running-on-8081.png`
 
 ---
 
-# 🎉 Project Complete!
-You now have a fully automated CI/CD pipeline using Jenkins, Docker, and NGINX running on EC2.
+# ✅ Conclusion
 
----
+This project successfully demonstrated the complete lifecycle of a modern CI/CD pipeline using Jenkins, Docker, GitHub Webhooks, and an NGINX deployment running on an Amazon Linux EC2 instance. Through a structured declarative Jenkins Pipeline, source code commits triggered automated builds, artifact archiving, image creation, container management, and deployment in a consistent and repeatable manner.
 
-# 📦 Downloadable README.md
-A downloadable version of this file is included.
+The implementation showcased essential DevOps principles, including:
+
+Continuous Integration: Automated detection of code changes through GitHub webhooks, immediate pipeline execution, and collection of commit metadata for traceability.
+
+Continuous Delivery/Deployment: Building and deploying the Dockerized application with zero manual intervention after code push.
+
+Infrastructure Automation: Successful container orchestration directly from Jenkins, ensuring the latest code version is always deployed.
+
+Observability & Validation: Archiving artifacts, generating commit logs, and maintaining a recurring automated build history for transparency, debugging, and auditability.
+
+The project also demonstrated resilience through error handling, container cleanup, environment preparation, and reproducible builds. Multiple successful webhook-triggered builds validated the automation pipeline end-to-end.
+
+In summary, this project not only delivered a functional deployment automation pipeline but also reinforced industry-standard DevOps workflows that improve consistency, reliability, and efficiency across software development and deployment cycles. It stands as a solid foundational CI/CD implementation ready to be extended into more advanced workflows such as testing stages, multi-environment deployments, or Kubernetes orchestration.
+
+## Below are screenshots of workflow:
+![secuirty-grp-port](./img/01_secuirty_grp_8081_added.png)
+![ec2-instance-running](./img/02_ec2_instance_runnung.png)
+![jenkins-active-running](./img/03_jenkins_status.png)
+![docker-installation](./img/04_docker_installed.png)
+![docker-version](./img/05_docker_version.png)
+![docker-setup](./img/06_docker_setup_al2023.png)
+![jenkins-docker-permission](./img/07_docker_jenkins_permission_test.png)
+![docker-test-hello-world](./img/08_docker_hello_world.png)
+![dockerfile-vim](./img/09_vim_dockerfile.png)
+![index-html-vim](./img/10_vim_index_html.png)
+![github-repo](./img/11_github_repo.png)
+![jenkins-configuration](./img/12_jenkins_pipeline_script.png)
+![jenkins-configuration](./img/13_pipeline_syntax.png)
+![docker-build](./img/14_docker_build.png)
+![docker-run](./img/15_docker_run_ps.png)
+![nginx-web-docker-build](./img/16_8081_WEB_page_docker_build.png)
+![jenkins-build](./img/17_jenkins_build_success.png)
+![jenkins-console-output](./img/18_jenkins_console_output_git.png)
+![jenkins-console-output](./img/19_jenkins_console_output_docker.png)
+![jenkins-console-output](./img/20_jenkins_console_output_success.png)
+![artifcats](./img/21_artifacts_page.png)
+![nginx-web-jenkins-build](./img/22_jenkins_webpage.png)
+![index-html-changes](./img/23_github_index-html_changes_commit.png)
+![github-webhook](./img/24_github_webhook_deliveries.png)
+![github-webhook-log](./img/25_webhook_trigger_log.png)
